@@ -2,3 +2,6 @@ cat .git/info/exclude
     venv
     app/.env
     .idea
+/venv/
+/.idea/
+/app/.env
