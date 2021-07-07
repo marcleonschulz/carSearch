@@ -1,0 +1,4 @@
+cat .git/info/exclude
+    venv
+    app/.env
+    .idea
