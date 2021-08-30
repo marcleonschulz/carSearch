@@ -44,7 +44,7 @@ def test():
 
 @app.get("/search-{hsn}-{tsn}")
 def search(hsn, tsn, db: Session = Depends(get_db)):
-    return curd.search(db, hsn, tsn)
+    return curd.search(db, hsn.upper(), tsn.upper())
 
 """
 @app.post("/new-password")
