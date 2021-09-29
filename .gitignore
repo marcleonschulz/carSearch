@@ -2,7 +2,7 @@ cat .git/info/exclude
     venv
     app/.env
     .idea
-    requirements.txt
+    app/requirements.txt
 /venv/
 /.idea/
 /app/.env

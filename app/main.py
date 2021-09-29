@@ -1,11 +1,14 @@
-import models, curd, csv
-import schemas
-from database import SessionLocal, engine
-from sqlalchemy.orm import Session
+import os
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-import os
-from dotenv import load_dotenv
+from sqlalchemy.orm import Session
+
+import csv
+import curd
+import models
+from database import SessionLocal, engine
 
 load_dotenv()
 
@@ -15,7 +18,12 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
-origins = ["*"]
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -52,7 +60,8 @@ def new_pass(new_pass: str, old_pass: str):
 
 @app.post("/create-list")
 def create_list(passwd: str, db: Session = Depends(get_db)):
-    """if passwd == passwd_env:
+    """
+    if passwd == passwd_env:
         pass
     else:
         return {"message": "Wrong password"}"""
@@ -61,11 +70,11 @@ def create_list(passwd: str, db: Session = Depends(get_db)):
         i = 0
         for row in csv_reader:
             i = i + 1
-            print(curd.create_car(db, models.Car(
+            curd.create_car(db, models.Car(
                 tsn=row[2],
                 handelsname=row[3]
             ), models.Hersteller(
                 hsn=row[0],
                 hersteller_name=row[1]
-            )))
+            ))
         return {"message": f"we write {i} cars"}

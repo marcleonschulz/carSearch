@@ -1,5 +1,0 @@
-fastapi.localhost {
-    log
-    tls internal
-    reverse_proxy fastapi:8000
-}
