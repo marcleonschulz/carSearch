@@ -7,7 +7,7 @@
 
     async function getResult() {
 
-        let response = await fetch(`http://localhost:8000/search-${hsn}-${tsn}`,{mode: "no-cors"});
+        let response = await fetch(`http://backend:8000/search-${hsn}-${tsn}`,{mode: "no-cors"});
         let text = await response.json();
         let data = text;
         return data;
