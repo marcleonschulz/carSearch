@@ -10,7 +10,7 @@ def search(db: Session, hsn, tsn):
         models.Car.owner_id == hersteller_search.id).first()
     if car_search is None:
         return {"error": "Das Auto wurde nicht gefunden"}
-    return {"handelsname": car_search.handelsname, "hersteller_name": hersteller_search.hersteller_name}
+    return {"handel_name": car_search.handelsname, "hersteller_name": hersteller_search.hersteller_name}
 
 
 def create_car_schema(db: Session, car: schemas.CarCreate, hs_schema: schemas.HerstellerCreate):

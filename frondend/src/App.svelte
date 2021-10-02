@@ -1,19 +1,15 @@
 <script>
     import Nav from "./Nav.svelte";
     import Card from "./Card.svelte";
-
     let hsn, tsn;
     let result;
-
     async function getResult() {
-
-        let response = await fetch(`http://localhost:8000/search-${hsn}-${tsn}`,{mode: "no-cors"});
+        let response = await fetch(`http://162.55.208.18:8000/search-${hsn}-${tsn}`);
         let text = await response.json();
         let data = text;
         return data;
     }
-
-    function submitHandler(e) {
+    function submitHandler() {
         result = getResult();
         hsn = "";
         tsn = "";
@@ -40,7 +36,7 @@
         {:then value}
             {#if value.error}
                 {value.error}
-            {:else if value.handelsname && value.hersteller_name}
+            {:else if value.handel_name && value.hersteller_name}
                 <div style="margin-top: 5%;">
                     <Card css_color={""} header={`Suche für TSN: ${tsn} und TSN: ${hsn}`} main={[`Hersteller :${value.hersteller_name}`,`Handelsname :${value.handel_name}`]}/>
                 </div>

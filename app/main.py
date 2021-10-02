@@ -18,12 +18,7 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
-]
+origins = ["*", "*:*", "localhost:5000"]
 
 app.add_middleware(
     CORSMiddleware,
