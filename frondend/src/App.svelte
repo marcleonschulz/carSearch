@@ -20,13 +20,13 @@
     }
 </script>
 <Nav/>
-<div style="margin: 60%; margin-top: 5%; margin-left: 15%; margin-right: 15%;" className="grid-container">
+<div style="margin: 60%; margin-top: 5%; margin-left: 15%; margin-right: 15%;" class="grid-container">
     <form on:submit|preventDefault={submitHandler}>
-        <p className="form-label">HSN</p>
-        <input bind:value={hsn} className="form-input" type="text" id="input-example-1" placeholder="{tsn}">
-        <p className="form-label">TSN</p>
-        <input bind:value={tsn} className="form-input" type="text" id="input-example-2" placeholder="{tsn}">
-        <button style="margin-top: 2%" className="btn">Suches</button>
+        <p class="form-label">HSN</p>
+        <input bind:value={hsn} class="form-input" type="text" id="input-example-1" placeholder="{tsn}">
+        <p class="form-label">TSN</p>
+        <input bind:value={tsn} class="form-input" type="text" id="input-example-2" placeholder="{tsn}">
+        <button style="margin-top: 2%" class="btn">Suches</button>
     </form>
 
     {#if result === undefined}
@@ -40,7 +40,7 @@
         {:then value}
             {#if value.error}
                 {value.error}
-            {:else if value.handelsname && value.hersteller_name}
+            {:else if value.handel_name && value.hersteller_name}
                 <div style="margin-top: 5%;">
                     <Card css_color={""} header={`Suche für TSN: ${tsn} und TSN: ${hsn}`}
                           main={[`Hersteller :${value.hersteller_name}`,`Handelsname :${value.handel_name}`]}/>
