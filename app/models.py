@@ -11,7 +11,7 @@ class Hersteller(Base):
 
 
     id = Column(Integer, primary_key=True, index=True)
-    hersteller_name = Column(String, unique=True, index=True)
+    hersteller_name = Column(String, index=True)
     hsn = Column(String, unique=True, index=True)
     cars = relationship("Car", back_populates="owner")
 

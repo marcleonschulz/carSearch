@@ -46,7 +46,7 @@ def create_car_schema(db: Session, car: schemas.CarCreate, hs_schema: schemas.He
 
 def create_car(db: Session, car: models.Car, hs_schema: models.Hersteller, ):
     hersteller_search = db.query(models.Hersteller).filter(
-        models.Hersteller.hersteller_name == hs_schema.hersteller_name).first()
+        models.Hersteller.hsn == hs_schema.hsn).first()
     if hersteller_search is None:
         db.add(models.Hersteller(
             hersteller_name=hs_schema.hersteller_name,
