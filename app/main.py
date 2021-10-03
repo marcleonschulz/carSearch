@@ -55,11 +55,10 @@ def new_pass(new_pass: str, old_pass: str):
 
 @app.post("/create-list")
 def create_list(passwd: str, db: Session = Depends(get_db)):
-    """
     if passwd == passwd_env:
         pass
     else:
-        return {"message": "Wrong password"}"""
+        return {"message": "Wrong password"}
     with open("data.csv") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         i = 0
