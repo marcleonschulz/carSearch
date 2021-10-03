@@ -39,7 +39,9 @@ def get_db():
 
 @app.get("/test")
 def test():
-    return {"hsn": "test"}
+    response = dict()
+    response["hsn"] = "test"
+    return response
 
 
 @app.get("/search-{hsn}-{tsn}")
@@ -47,23 +49,14 @@ def search(hsn, tsn, db: Session = Depends(get_db)):
     return curd.search(db, hsn.upper(), tsn.upper())
 
 
-"""
-@app.post("/new-password")
-def new_pass(new_pass: str, old_pass: str):
-"""
-
-
 @app.post("/create-list")
 def create_list(passwd: str, db: Session = Depends(get_db)):
-    if passwd == passwd_env:
-        pass
-    else:
+    if passwd != passwd_env:
         return {"message": "Wrong password"}
+
     with open("data.csv") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-        i = 0
-        for row in csv_reader:
-            i = i + 1
+        for i, row in enumerate(csv_reader):
             curd.create_car(db, models.Car(
                 tsn=row[2],
                 handelsname=row[3]

@@ -2,15 +2,29 @@ import models, schemas
 from sqlalchemy.orm import Session
 
 
+def create_error_dict(message):
+    response = dict()
+    response["error"] = message
+    return response
+
+
 def search(db: Session, hsn, tsn):
     hersteller_search = db.query(models.Hersteller).filter(models.Hersteller.hsn == hsn).first()
+
     if hersteller_search is None:
-        return {"error": "Der Hersteller wird nicht gefunden"}
+        return create_error_dict("Der Hersteller wird nicht gefunden")
+
     car_search = db.query(models.Car).filter(models.Car.tsn == tsn).filter(
         models.Car.owner_id == hersteller_search.id).first()
+
     if car_search is None:
-        return {"error": "Das Auto wurde nicht gefunden"}
-    return {"handel_name": car_search.handelsname, "hersteller_name": hersteller_search.hersteller_name}
+        return create_error_dict("Das Auto wurde nicht gefunden")
+
+    response = dict()
+    response["handel_name"] = car_search.handelsname
+    response["hersteller_name"] = hersteller_search.hersteller_name
+
+    return response
 
 
 def create_car_schema(db: Session, car: schemas.CarCreate, hs_schema: schemas.HerstellerCreate):
