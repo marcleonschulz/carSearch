@@ -1,5 +1,16 @@
-import models, schemas
+from fastapi import Depends
 from sqlalchemy.orm import Session
+import csv
+import models
+from database import SessionLocal, engine
+
+
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
 
 
 def create_error_dict(message):
@@ -8,7 +19,7 @@ def create_error_dict(message):
     return response
 
 
-def search(db: Session, hsn, tsn):
+def search(hsn, tsn, db: Session = Depends(get_db)):
     hersteller_search = db.query(models.Hersteller).filter(models.Hersteller.hsn == hsn).first()
 
     if hersteller_search is None:
@@ -27,62 +38,21 @@ def search(db: Session, hsn, tsn):
     return response
 
 
-def create_car_schema(db: Session, car: schemas.CarCreate, hs_schema: schemas.HerstellerCreate):
-    hersteller_search = db.query(models.Hersteller).filter(
-        models.Hersteller.hersteller_name == hs_schema.hersteller_name).first()
-
-    if hersteller_search is None:
-        db.add(models.Hersteller(
-            hersteller_name=hs_schema.hersteller_name,
-            hsn=hs_schema.hsn
-        ))
-        db.commit()
-
-    hersteller_search = db.query(models.Hersteller).filter(
-        models.Hersteller.hersteller_name == hs_schema.hersteller_name).first()
-    if hersteller_search is None:
-        return {"message": "We don't can create the Hersteller"}
-
-    if db.query(models.Car).filter(models.Car.tsn == car.tsn).first() is not None:
-        return {"message": "We have this car in the database"}
-
-    db.add(models.Car(
-        tsn=car.tsn,
-        handelsname=car.handelsname,
-        owner_id=hersteller_search.id
-    ))
+def setup_db():
+    db = SessionLocal()
+    models.Base.metadata.create_all(bind=engine)
+    with open("data.csv") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            tsn = row[2]
+            handelsname = row[3]
+            hsn = row[0]
+            hersteller_name = row[1]
+            hersteller: models.Hersteller = db.query(models.Hersteller).filter(models.Hersteller.hsn == hsn).first()
+            if hersteller is None:
+                db.add(models.Hersteller(hersteller_name=hersteller_name, hsn=hsn))
+                db.commit()
+                hersteller = db.query(models.Hersteller).filter(models.Hersteller.hsn == hsn).first()
+            db.add(models.Car(tsn=tsn, handelsname=handelsname, owner_id=hersteller.id))
     db.commit()
-
-    if db.query(models.Car).filter(models.Car.tsn == car.tsn).first() is not None:
-        return {"message": "car is in"}
-    return {"message": "We have a problem"}
-
-
-def create_car(db: Session, car: models.Car, hs_schema: models.Hersteller, ):
-    hersteller_search = db.query(models.Hersteller).filter(
-        models.Hersteller.hsn == hs_schema.hsn).first()
-    if hersteller_search is None:
-        db.add(models.Hersteller(
-            hersteller_name=hs_schema.hersteller_name,
-            hsn=hs_schema.hsn
-        ))
-        db.commit()
-
-    hersteller_search = db.query(models.Hersteller).filter(
-        models.Hersteller.hersteller_name == hs_schema.hersteller_name).first()
-    if hersteller_search is None:
-        return {"message": "We don't can create the Hersteller"}
-    """
-    if db.query(models.Car).filter(models.Car.tsn == car.tsn).first() is not None:
-        return {"message": "We have this car in the database"}
-    """
-    db.add(models.Car(
-        tsn=car.tsn,
-        handelsname=car.handelsname,
-        owner_id=hersteller_search.id
-    ))
-    db.commit()
-
-    if db.query(models.Car).filter(models.Car.tsn == car.tsn).first() is not None:
-        return {"message": "car is in"}
-    return {"message": "We have a problem"}
+    db.close()

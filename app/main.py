@@ -1,11 +1,9 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
 
-import csv
 import curd
 import models
 from database import SessionLocal, engine
@@ -29,13 +27,6 @@ app.add_middleware(
 )
 
 
-def get_db():
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
-
 
 @app.get("/test")
 def test():
@@ -45,23 +36,12 @@ def test():
 
 
 @app.get("/search-{hsn}-{tsn}")
-def search(hsn, tsn, db: Session = Depends(get_db)):
-    return curd.search(db, hsn.upper(), tsn.upper())
+def search(hsn, tsn):
+    return curd.search(hsn.upper(), tsn.upper())
 
 
 @app.post("/create-list")
-def create_list(passwd: str, db: Session = Depends(get_db)):
-    if passwd != passwd_env:
-        return {"message": "Wrong password"}
-
-    with open("data.csv") as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        for i, row in enumerate(csv_reader):
-            curd.create_car(db, models.Car(
-                tsn=row[2],
-                handelsname=row[3]
-            ), models.Hersteller(
-                hsn=row[0],
-                hersteller_name=row[1]
-            ))
-        return {"message": f"we write {i} cars"}
+def create_list(passwd: str):
+    #if passwd != passwd_env:
+    #    return {"message": "Wrong password"}
+    curd.setup_db()
