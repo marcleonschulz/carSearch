@@ -1,0 +1,9 @@
+{
+    email marcleonschulz@gmail.com
+}
+marc-schulz.tech {
+    reverse_proxy frontend:5000
+}
+www.marc-schulz.tech {
+    redir https://marc-schulz.tech{uri}
+}

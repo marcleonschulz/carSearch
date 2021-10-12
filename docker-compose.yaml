@@ -1,5 +1,23 @@
 version: "3"
+
+networks:
+  web:
+    external: true
+
 services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /data/caddy/data:/data
+      - /data/caddy/config:/config
+    networks:
+      - web
+
   backend:
     build: ./app
     restart: unless-stopped
@@ -8,7 +26,7 @@ services:
     environment:
       MY_NICE_PASSWORD: test
     networks:
-      - "demo-net"
+      - web
       
   frontend:
     build: ./frondend
@@ -19,8 +37,6 @@ services:
       - PORT=5000
       - HOST=0.0.0.0
     networks:
-      - "demo-net"
+      - web
     depends_on:
       - backend
-networks:
-  demo-net:
