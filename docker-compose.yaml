@@ -12,9 +12,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /data/caddy/data:/data
-      - /data/caddy/config:/config
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - web
 
@@ -40,3 +41,7 @@ services:
       - web
     depends_on:
       - backend
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
