@@ -25,7 +25,7 @@ services:
     ports:
       - 8000:8000
     environment:
-      MY_NICE_PASSWORD: test
+      MY_NICE_PASSWORD: sdfasfsdfsdf
     networks:
       - web
       
