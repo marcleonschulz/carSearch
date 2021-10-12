@@ -7,7 +7,7 @@
 
     async function getResult() {
 
-        let response = await fetch(`http://162.55.208.18:8000/search-${hsn}-${tsn}`);
+        let response = await fetch(`api.marc-schulz.tech/search-${hsn}-${tsn}`);
         let text = await response.json();
         let data = text;
         return data;
