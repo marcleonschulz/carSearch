@@ -19,7 +19,8 @@ def create_error_dict(message):
     return response
 
 
-def search(hsn, tsn, db: Session = Depends(get_db)):
+def search(hsn, tsn):
+    db = SessionLocal()
     hersteller_search = db.query(models.Hersteller).filter(models.Hersteller.hsn == hsn).first()
 
     if hersteller_search is None:

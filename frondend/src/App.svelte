@@ -7,7 +7,7 @@
 
     async function getResult() {
 
-        let response = await fetch(`api.marc-schulz.tech/search-${hsn}-${tsn}`);
+        let response = await fetch(`https://api.marc-schulz.tech/search-${hsn}-${tsn}`,{mode: "no-cors"});
         let text = await response.json();
         let data = text;
         return data;
@@ -48,7 +48,7 @@
             {/if}
         {:catch error}
             <Card css_color={"text-error"} header={"Error"}
-                  main={["Datenbank würd nicht gefunden", `Error Message ="${error.message}"`]}/>
+                  main={["Fehler beim erreichen der API!", `Error Message ="${error.message}"`]}/>
         {/await}
     {/if}
 </div>
