@@ -42,6 +42,6 @@ def search(hsn, tsn):
 
 @app.post("/create-list")
 def create_list(passwd: str):
-    #if passwd != passwd_env:
-    #    return {"message": "Wrong password"}
+    if passwd != passwd_env:
+        return {"message": "Wrong password"}
     curd.setup_db()
