@@ -52,7 +52,3 @@
         {/await}
     {/if}
 </div>
-
-
-<style>
-</style>
