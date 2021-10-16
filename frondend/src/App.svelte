@@ -7,7 +7,7 @@
 
     async function getResult() {
 
-        let response = await fetch(`https://api.marc-schulz.tech/search-${hsn}-${tsn}`,{mode: "no-cors"});
+        let response = await fetch(`https://api.marc-schulz.tech/search-${hsn}-${tsn}`);
         let text = await response.json();
         let data = text;
         return data;
