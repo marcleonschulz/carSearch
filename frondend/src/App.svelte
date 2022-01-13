@@ -2,11 +2,12 @@
     import Nav from "./Nav.svelte";
     import Card from "./Card.svelte";
 
-    let hsn, tsn;
+    let hsn, tsn, old_hsn, old_tsn;
     let result;
 
     async function getResult() {
-
+        old_hsn = hsn;
+        old_tsn = tsn;
         let response = await fetch(`https://api.marc-schulz.tech/search-${hsn}-${tsn}`);
         let text = await response.json();
         let data = text;
@@ -39,10 +40,10 @@
             <p>Loading...</p>
         {:then value}
             {#if value.error}
-                {value.error}
+                {value.error} bei der Suche für TSN: ${old_tsn} und TSN: ${old_hsn}
             {:else if value.handel_name && value.hersteller_name}
                 <div style="margin-top: 5%;">
-                    <Card css_color={""} header={`Suche für TSN: ${tsn} und TSN: ${hsn}`}
+                    <Card css_color={""} header={`Suche für TSN: ${old_tsn} und TSN: ${old_hsn}`}
                           main={[`Hersteller :${value.hersteller_name}`,`Handelsname :${value.handel_name}`]}/>
                 </div>
             {/if}

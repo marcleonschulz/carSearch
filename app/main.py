@@ -27,14 +27,6 @@ app.add_middleware(
 )
 
 
-
-@app.get("/test")
-def test():
-    response = dict()
-    response["hsn"] = "test"
-    return response
-
-
 @app.get("/search-{hsn}-{tsn}")
 def search(hsn, tsn):
     return curd.search(hsn.upper(), tsn.upper())
