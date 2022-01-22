@@ -1,5 +1,3 @@
-from fastapi import Depends
-from sqlalchemy.orm import Session
 import csv
 import models
 from database import SessionLocal, engine
@@ -25,6 +23,9 @@ def search(hsn, tsn):
 
     if hersteller_search is None:
         return create_error_dict("Der Hersteller wird nicht gefunden")
+
+    if tsn is None:
+        return hersteller_search
 
     car_search = db.query(models.Car).filter(models.Car.tsn == tsn).filter(
         models.Car.owner_id == hersteller_search.id).first()

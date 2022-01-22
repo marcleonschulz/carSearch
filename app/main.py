@@ -26,6 +26,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/search-{hsn}")
+def search_hsn(hsn):
+    search_tmp = curd.search(hsn.upper(), None)
+    return {"hsn": search_tmp.hsn,
+            "hersteller_name": search_tmp.hersteller_name}
 
 @app.get("/search-{hsn}-{tsn}")
 def search(hsn, tsn):
