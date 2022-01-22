@@ -16,17 +16,21 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
-origins = ["*", "*:*", "localhost:5000", "marc-schulz.tech"]
+origins = [
+    "https://marc-schulz.tech",
+    "http://localhost",
+    "http://localhost:5000",
+]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["POST","GET"],
     allow_headers=["*"],
 )
 
-@app.get("/search-{hsn}")
+@app.get("/hsn-search-{hsn}")
 def search_hsn(hsn):
     search_tmp = curd.search(hsn.upper(), None)
     return {"hsn": search_tmp.hsn,
