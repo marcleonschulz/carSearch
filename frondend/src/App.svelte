@@ -1,17 +1,27 @@
 <script>
     import Nav from "./Nav.svelte";
     import Card from "./Card.svelte";
-
-    let hsn, tsn, old_hsn, old_tsn;
+    let hsn = "";
+    let tsn = "";
+    let old_hsn, old_tsn = "";
     let result;
-
     async function getResult() {
         old_hsn = hsn;
         old_tsn = tsn;
-        let response = await fetch(`https://api.marc-schulz.tech/search-${hsn}-${tsn}`);
-        let text = await response.json();
-        let data = text;
-        return data;
+        if(hsn != "" && tsn != ""){
+            let response = await fetch(`https://api.marc-schulz.tech/search-${hsn}-${tsn}`);
+            let text = await response.json();
+            let data = text;
+            return data;
+        } else if (hsn != ""){
+            let response = await fetch(`https://api.marc-schulz.tech/hsn-search-${hsn}`);
+            let text = await response.json();
+            let data = text;
+            console.log(data)
+            return data;
+        } else {
+            return {"error": "Sie haben nichts eingegeben!"}
+        }
     }
 
     function submitHandler(e) {
@@ -40,11 +50,16 @@
             <p>Loading...</p>
         {:then value}
             {#if value.error}
-                {value.error} bei der Suche für TSN: ${old_tsn} und TSN: ${old_hsn}
+                {value.error} bei der Suche für HSN: "{old_hsn}" und TSN: "{old_tsn}"
             {:else if value.handel_name && value.hersteller_name}
                 <div style="margin-top: 5%;">
-                    <Card css_color={""} header={`Suche für TSN: ${old_tsn} und TSN: ${old_hsn}`}
+                    {#if value.handel_name}
+                    <Card css_color={""} header={`Suche für HSN: ${old_hsn} und TSN: ${old_tsn}`}
                           main={[`Hersteller :${value.hersteller_name}`,`Handelsname :${value.handel_name}`]}/>
+                        {:else}
+                        <Card css_color={""} header={`Suche für HSN: ${old_hsn}`}
+                              main={[`Hersteller :${value.hersteller_name}`]}/>
+                    {/if}
                 </div>
             {/if}
         {:catch error}
