@@ -13,33 +13,14 @@ services:
     labels:
       # Traefik configuration, Hostname needs to be changed
 
-      - traefik.http.routers.backend-http.rule=Host(`api.marc-schulz.tech`)
+      - traefik.http.routers.backend-http.rule=Host(`api.marc-schulz.org`)
       - traefik.http.routers.backend-http.entrypoints=http
       - traefik.http.routers.backend-http.middlewares=redirect
-      - traefik.http.routers.backend-https.rule=Host(`api.marc-schulz.tech`)
+      - traefik.http.routers.backend-https.rule=Host(`api.marc-schulz.org`)
       - traefik.http.routers.backend-https.entrypoints=https
       - traefik.http.routers.backend-https.tls=true
       - traefik.http.routers.backend-https.tls.certresolver=letsencrypt
       - traefik.http.services.backend.loadbalancer.server.port=8000
-      - traefik.http.middlewares.redirect.redirectscheme.scheme=https
-    networks:
-      - proxy
-      
-  frontend:
-    build: ./frondend
-    environment:
-      - NODE_ENV=development
-      - PORT=5000
-      - HOST=0.0.0.0
-    labels:
-      - traefik.http.routers.frontend-http.rule=Host(`marc-schulz.tech`)
-      - traefik.http.routers.frontend-http.entrypoints=http
-      - traefik.http.routers.frontend-http.middlewares=redirect
-      - traefik.http.routers.frontend-https.rule=Host(`marc-schulz.tech`)
-      - traefik.http.routers.frontend-https.entrypoints=https
-      - traefik.http.routers.frontend-https.tls=true
-      - traefik.http.routers.frontend-https.tls.certresolver=letsencrypt
-      - traefik.http.services.frontend.loadbalancer.server.port=5000
       - traefik.http.middlewares.redirect.redirectscheme.scheme=https
     networks:
       - proxy
