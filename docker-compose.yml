@@ -12,7 +12,6 @@ services:
       MY_NICE_PASSWORD: test
     labels:
       # Traefik configuration, Hostname needs to be changed
-
       - traefik.http.routers.backend-http.rule=Host(`api.marc-schulz.org`)
       - traefik.http.routers.backend-http.entrypoints=http
       - traefik.http.routers.backend-http.middlewares=redirect
